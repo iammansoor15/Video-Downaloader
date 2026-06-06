@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(yt-dlp --version)",
+      "Bash(ffmpeg -version)",
+      "Bash(pip show *)",
+      "Bash(python -m pip install -U yt-dlp)",
+      "Bash(python -m yt_dlp --version)",
+      "Bash(npx --yes create-next-app@latest .next-scaffold --ts --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --use-npm --skip-install --yes)",
+      "Bash(npx --yes create-next-app@latest scaffold_tmp --ts --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --use-npm --skip-install --yes)",
+      "Bash(mv scaffold_tmp/.git scaffold_tmp/.gitignore ./)",
+      "Bash(mv scaffold_tmp/* ./)",
+      "Bash(npm install *)",
+      "Bash(redis-cli --version)",
+      "Bash(redis-server --version)",
+      "Bash(docker --version)",
+      "Bash(where memurai *)",
+      "Bash(docker rm *)",
+      "Bash(docker run *)",
+      "Bash(docker exec *)",
+      "Bash(python -m yt_dlp -J --no-warnings \"https://www.youtube.com/watch?v=jNQXAC9IVRw\")",
+      "Bash(python -c 'import sys,json; d=json.load\\(sys.stdin\\); print\\('\\\\''TITLE:'\\\\'',d.get\\('\\\\''title'\\\\''\\)\\); print\\('\\\\''NFORMATS:'\\\\'',len\\(d.get\\('\\\\''formats'\\\\'',[]\\)\\)\\); *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -X POST http://localhost:3000/api/info -H \"Content-Type: application/json\" -d '{\"url\":\"https://www.youtube.com/watch?v=jNQXAC9IVRw\"}')",
+      "Bash(python -m json.tool)",
+      "Bash(curl -s http://localhost:3000/ -o /tmp_page.html -w \"HTTP %{http_code}\\\\n\")",
+      "Bash(grep -o \"Video Downloader\" /tmp_page.html)",
+      "Bash(grep -ci \"error\\\\|exception\" /tmp_page.html)",
+      "Bash(rm -f /tmp_page.html)",
+      "Bash(curl -s http://localhost:3000/)"
+    ]
+  }
+}
