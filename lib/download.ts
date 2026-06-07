@@ -1,6 +1,6 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import { runYtDlp } from './ytdlp';
+import { runYtDlp, authArgs } from './ytdlp';
 import { TMP_DIR, JOB_TIMEOUT_MS } from './config';
 import type { JobRequest, JobProgress } from './types';
 
@@ -64,9 +64,8 @@ export async function runDownload(
     args.push('-f', fmt, '--merge-output-format', ext);
   }
 
-  // Optional cookies file (for age-restricted / private content) — see Phase 7.
-  if (process.env.YTDLP_COOKIES) args.push('--cookies', process.env.YTDLP_COOKIES);
-  if (process.env.YTDLP_PROXY) args.push('--proxy', process.env.YTDLP_PROXY);
+  // Cookies / proxy (anti-bot, age-restricted, private) — shared with fetchInfo.
+  args.push(...authArgs());
 
   args.push(req.url);
 

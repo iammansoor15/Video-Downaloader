@@ -19,6 +19,19 @@ export function resolveYtDlp(): { cmd: string; prefixArgs: string[] } {
   return { cmd: 'yt-dlp', prefixArgs: [] };
 }
 
+/**
+ * Anti-bot / auth args applied to EVERY yt-dlp call (info + download).
+ * YouTube increasingly returns "Sign in to confirm you're not a bot" unless a
+ * logged-in session is supplied. Set YTDLP_COOKIES to a cookies.txt path and/or
+ * YTDLP_PROXY to a proxy URL to satisfy it.
+ */
+export function authArgs(): string[] {
+  const args: string[] = [];
+  if (process.env.YTDLP_COOKIES) args.push('--cookies', process.env.YTDLP_COOKIES);
+  if (process.env.YTDLP_PROXY) args.push('--proxy', process.env.YTDLP_PROXY);
+  return args;
+}
+
 export interface RunOptions {
   onStderr?: (line: string) => void;
   onStdout?: (line: string) => void;
@@ -95,7 +108,7 @@ export function runYtDlp(args: string[], opts: RunOptions = {}): Promise<string>
 /** Fetch metadata + formats for a single URL (playlists collapsed to one item). */
 export async function fetchInfo(url: string): Promise<YtInfo> {
   const out = await runYtDlp(
-    ['-J', '--no-warnings', '--no-playlist', '--no-progress', url],
+    ['-J', '--no-warnings', '--no-playlist', '--no-progress', ...authArgs(), url],
     { timeoutMs: 45_000 },
   );
   return JSON.parse(out) as YtInfo;
