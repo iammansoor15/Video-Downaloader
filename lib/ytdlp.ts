@@ -24,7 +24,6 @@ export interface RunOptions {
   onStdout?: (line: string) => void;
   signal?: AbortSignal;
   timeoutMs?: number;
-  cwd?: string;
 }
 
 /**
@@ -37,7 +36,6 @@ export function runYtDlp(args: string[], opts: RunOptions = {}): Promise<string>
   return new Promise((resolve, reject) => {
     const child = spawn(cmd, [...prefixArgs, ...args], {
       windowsHide: true,
-      cwd: opts.cwd,
     });
 
     let stdout = '';

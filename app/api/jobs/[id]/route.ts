@@ -1,4 +1,4 @@
-import { downloadQueue } from '@/lib/queue';
+import { getJobProgress, getJobResult, getJobState } from '@/lib/jobs';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -6,17 +6,21 @@ export const dynamic = 'force-dynamic';
 export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
   try {
-    const job = await downloadQueue.getJob(id);
-    if (!job) return Response.json({ error: 'Job not found.' }, { status: 404 });
-    const state = await job.getState();
-    const result = job.returnvalue as { filename?: string } | null;
+    const state = await getJobState(id);
+    if (!state) return Response.json({ error: 'Job not found.' }, { status: 404 });
+
+    const [progress, result] = await Promise.all([
+      getJobProgress(id),
+      getJobResult(id),
+    ]);
+
     return Response.json({
-      id: job.id,
+      id,
       state,
-      progress: job.progress,
+      progress,
       filename: result?.filename ?? null,
-      downloadUrl: state === 'completed' ? `/api/download/${job.id}` : null,
-      error: job.failedReason ?? null,
+      downloadUrl: state === 'completed' ? `/api/download/${id}` : null,
+      error: state === 'failed' ? 'Download failed.' : null,
     });
   } catch {
     return Response.json(
