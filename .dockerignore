@@ -1,0 +1,18 @@
+# Keep the build context small and — critically — never copy the host's
+# node_modules into the image (they're Windows-built and would clobber the
+# Linux deps installed by `npm ci`).
+node_modules
+.next
+out
+build
+tmp
+.git
+.gitignore
+Dockerfile
+.dockerignore
+*.md
+.env*
+npm-debug.log*
+*.tsbuildinfo
+.vercel
+err.txt

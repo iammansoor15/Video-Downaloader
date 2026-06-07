@@ -1,0 +1,21 @@
+# Optional Render Blueprint. With this committed, Render can configure the
+# service automatically (New + → "Blueprint" → pick the repo). If you'd rather
+# click through the dashboard, you can ignore this file — Render auto-detects
+# the Dockerfile either way.
+services:
+  - type: web
+    name: downloader
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free # free tier sleeps after ~15 min idle; bump to "starter" to stay warm
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Default in-process job runner (no Redis / no separate worker). Set to 1
+      # only if you later add a Redis instance + a worker service.
+      - key: USE_REDIS
+        value: "0"
+      # Render's ephemeral disk is far smaller than the 50 GB VPS this guard was
+      # tuned for; 1 GB keeps the free-space check from rejecting every job.
+      - key: MIN_FREE_DISK_BYTES
+        value: "1073741824"
