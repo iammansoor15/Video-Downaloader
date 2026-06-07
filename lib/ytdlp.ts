@@ -21,14 +21,22 @@ export function resolveYtDlp(): { cmd: string; prefixArgs: string[] } {
 
 /**
  * Anti-bot / auth args applied to EVERY yt-dlp call (info + download).
- * YouTube increasingly returns "Sign in to confirm you're not a bot" unless a
- * logged-in session is supplied. Set YTDLP_COOKIES to a cookies.txt path and/or
- * YTDLP_PROXY to a proxy URL to satisfy it.
+ * YouTube increasingly returns "Sign in to confirm you're not a bot" unless the
+ * request looks legitimate. The Docker image self-hosts a POT (Proof-of-Origin
+ * Token) provider that the bundled yt-dlp plugin uses automatically — no env
+ * needed for that. These knobs are extra levers:
+ *  - YTDLP_COOKIES: path to a cookies.txt (logged-in session).
+ *  - YTDLP_PROXY: proxy URL (a residential proxy is the most reliable fix).
+ *  - YTDLP_EXTRACTOR_ARGS: raw --extractor-args value, e.g.
+ *    "youtube:player_client=web_safari" or to point the POT plugin at a remote
+ *    provider "youtubepot-bgutilhttp:base_url=http://host:4416".
  */
 export function authArgs(): string[] {
   const args: string[] = [];
   if (process.env.YTDLP_COOKIES) args.push('--cookies', process.env.YTDLP_COOKIES);
   if (process.env.YTDLP_PROXY) args.push('--proxy', process.env.YTDLP_PROXY);
+  if (process.env.YTDLP_EXTRACTOR_ARGS)
+    args.push('--extractor-args', process.env.YTDLP_EXTRACTOR_ARGS);
   return args;
 }
 
