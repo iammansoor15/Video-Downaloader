@@ -217,7 +217,7 @@ export function DownloaderLandingPage({
             href={SITE_URL}
             className="text-white/60 underline-offset-4 hover:text-white hover:underline"
           >
-            mansoor.website
+            Stream Save
           </a>
           . All rights reserved.
         </p>

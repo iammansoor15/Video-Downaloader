@@ -7,6 +7,7 @@ import {
   SITE_TITLE,
   SITE_URL,
 } from "@/lib/seo";
+import { SiteHeader } from "./components/SiteHeader";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -121,6 +122,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLdMarkup }}
         />
+        <SiteHeader />
         {children}
       </body>
     </html>

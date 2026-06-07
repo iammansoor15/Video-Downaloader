@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { LOGO_MARK_DATA_URI } from "@/lib/brand";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -24,7 +25,7 @@ export default function Image() {
           flexDirection: "column",
           justifyContent: "space-between",
           background:
-            "linear-gradient(135deg, #09090b 0%, #18181b 48%, #172554 100%)",
+            "linear-gradient(135deg, #09090b 0%, #1e1b4b 52%, #4c1d95 100%)",
           color: "#ffffff",
           padding: 64,
           fontFamily: "Arial, Helvetica, sans-serif",
@@ -39,10 +40,14 @@ export default function Image() {
             fontWeight: 700,
           }}
         >
-          <span>{SITE_NAME}</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={LOGO_MARK_DATA_URI} width={56} height={56} alt="" />
+            <span>{SITE_NAME}</span>
+          </div>
           <span
             style={{
-              color: "#bfdbfe",
+              color: "#c4b5fd",
               fontSize: 24,
               fontWeight: 600,
             }}
@@ -56,7 +61,7 @@ export default function Image() {
             style={{
               display: "flex",
               gap: 14,
-              color: "#dbeafe",
+              color: "#ddd6fe",
               fontSize: 28,
               fontWeight: 700,
             }}
@@ -93,7 +98,7 @@ export default function Image() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            color: "#a5b4fc",
+            color: "#c4b5fd",
             fontSize: 28,
             fontWeight: 700,
           }}

@@ -28,7 +28,19 @@
       "Bash(grep -o \"Video Downloader\" /tmp_page.html)",
       "Bash(grep -ci \"error\\\\|exception\" /tmp_page.html)",
       "Bash(rm -f /tmp_page.html)",
-      "Bash(curl -s http://localhost:3000/)"
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(findstr /i icon)",
+      "Bash(ls)",
+      "Bash(dir /b)",
+      "Bash(git rm *)",
+      "Bash(npx tsc *)",
+      "Bash(echo \"---TSC DONE \\(exit $?\\)---\")",
+      "Bash(npx next *)",
+      "Bash(npx eslint *)",
+      "Bash(echo \"---ESLINT exit $?---\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3123/icon.svg)",
+      "Bash(curl -s http://localhost:3123/ -o ./_verify_home.html)",
+      "PowerShell(Get-NetTCPConnection *)"
     ]
   }
 }

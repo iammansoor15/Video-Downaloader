@@ -70,7 +70,7 @@ export const landingPages = {
       "Paste a YouTube, Instagram, Twitter/X, TikTok, or other public video link to download MP4 video or MP3 audio in the best available quality.",
     platformHeading: "Online video downloader for every major platform",
     platformIntro:
-      "Mansoor.website is built for high-intent video download searches: YouTube downloader, Instagram downloader, Twitter video downloader, TikTok downloader, MP4 downloader, and MP3 audio downloader.",
+      "Stream Save is built for high-intent video download searches: YouTube downloader, Instagram downloader, Twitter video downloader, TikTok downloader, MP4 downloader, and MP3 audio downloader.",
     platformCards: [
       {
         title: "YouTube Downloader",
