@@ -26,6 +26,7 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       ffmpeg ca-certificates tini \
       python3 python3-pip \
+      libatomic1 \
       libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libjpeg62-turbo libgif7 librsvg2-2 \
  && python3 -m pip install --no-cache-dir --break-system-packages \
       yt-dlp "bgutil-ytdlp-pot-provider==1.3.1" \
