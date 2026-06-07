@@ -24,7 +24,7 @@ FROM node:20-bookworm-slim
 #    addon links against.
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-      ffmpeg ca-certificates tini \
+      ffmpeg ca-certificates tini curl \
       python3 python3-pip \
       libatomic1 \
       libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libjpeg62-turbo libgif7 librsvg2-2 \
@@ -46,12 +46,17 @@ RUN npm ci
 
 # App source, then build.
 COPY . .
+# Strip any CRLF (the script may be authored on Windows) and make it executable.
+RUN sed -i 's/\r$//' docker-entrypoint.sh && chmod +x docker-entrypoint.sh
 RUN npm run build
 
 ENV NODE_ENV=production
+# Where the bundled bgutil POT plugin and the /api/health probe reach the
+# self-hosted provider. Setting this also flips lib/ytdlp.ts into its hardened,
+# datacenter-friendly extractor-args (see authArgs()).
+ENV BGUTIL_POT_BASE_URL=http://127.0.0.1:4416
 # Render injects $PORT and `next start` listens on it automatically.
-# The yt-dlp bgutil plugin auto-talks to the provider on 127.0.0.1:4416.
 EXPOSE 3000
 ENTRYPOINT ["/usr/bin/tini", "--"]
-# Start the POT provider in the background, then the Next.js app in the foreground.
-CMD ["sh", "-c", "cd /opt/bgutil-provider && node25 build/main.js & exec npm start"]
+# Boot the POT provider, wait until it answers /ping, then start the app.
+CMD ["/app/docker-entrypoint.sh"]

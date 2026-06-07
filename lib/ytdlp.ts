@@ -20,23 +20,44 @@ export function resolveYtDlp(): { cmd: string; prefixArgs: string[] } {
 }
 
 /**
+ * Base URL of the self-hosted bgutil POT (Proof-of-Origin Token) provider.
+ * The Docker image starts it and sets this env (see Dockerfile); when it's set
+ * we know we're running in the container alongside the provider, so authArgs()
+ * switches into its hardened, datacenter-friendly defaults. Empty on the dev box
+ * (no provider) → authArgs() leaves yt-dlp's own defaults alone.
+ * /api/health pings the same URL.
+ */
+export const POT_BASE_URL = process.env.BGUTIL_POT_BASE_URL?.trim() || '';
+
+/**
  * Anti-bot / auth args applied to EVERY yt-dlp call (info + download).
- * YouTube increasingly returns "Sign in to confirm you're not a bot" unless the
- * request looks legitimate. The Docker image self-hosts a POT (Proof-of-Origin
- * Token) provider that the bundled yt-dlp plugin uses automatically — no env
- * needed for that. These knobs are extra levers:
- *  - YTDLP_COOKIES: path to a cookies.txt (logged-in session).
- *  - YTDLP_PROXY: proxy URL (a residential proxy is the most reliable fix).
- *  - YTDLP_EXTRACTOR_ARGS: raw --extractor-args value, e.g.
- *    "youtube:player_client=web_safari" or to point the POT plugin at a remote
- *    provider "youtubepot-bgutilhttp:base_url=http://host:4416".
+ * YouTube returns "Sign in to confirm you're not a bot" from datacenter IPs
+ * unless the request both (a) carries a PO token and (b) uses a client that
+ * accepts one. The Docker image self-hosts a POT provider; the args below make
+ * yt-dlp actually use it instead of silently falling back to a tokenless client.
+ *
+ * Levers (all optional, all override the defaults):
+ *  - YTDLP_COOKIES: path to a cookies.txt (logged-in session) — most reliable.
+ *  - YTDLP_PROXY: proxy URL (a residential proxy is the strongest fix).
+ *  - YTDLP_EXTRACTOR_ARGS: raw --extractor-args value that fully replaces the
+ *    hardened defaults, e.g. "youtube:player_client=web_safari".
  */
 export function authArgs(): string[] {
   const args: string[] = [];
   if (process.env.YTDLP_COOKIES) args.push('--cookies', process.env.YTDLP_COOKIES);
   if (process.env.YTDLP_PROXY) args.push('--proxy', process.env.YTDLP_PROXY);
-  if (process.env.YTDLP_EXTRACTOR_ARGS)
+
+  if (process.env.YTDLP_EXTRACTOR_ARGS) {
+    // Full manual override — the caller owns client selection + POT wiring.
     args.push('--extractor-args', process.env.YTDLP_EXTRACTOR_ARGS);
+  } else if (POT_BASE_URL) {
+    // In the container with the provider running. Force the GVS-PO-token
+    // clients the bgutil provider can serve (listing several lets yt-dlp fall
+    // back if one is rate-limited), and point the plugin explicitly at our
+    // provider so it never silently degrades to a tokenless request.
+    args.push('--extractor-args', 'youtube:player_client=web_safari,web,mweb');
+    args.push('--extractor-args', `youtubepot-bgutilhttp:base_url=${POT_BASE_URL}`);
+  }
   return args;
 }
 
