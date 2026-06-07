@@ -65,9 +65,9 @@ export const landingPages = {
       "mp4 downloader",
       "mp3 downloader",
     ],
-    h1: "YouTube, Instagram & Twitter/X Video Downloader",
+    h1: "YouTube, Instagram & Twitter Video Downloader",
     intro:
-      "Paste a YouTube, Instagram, Twitter/X, TikTok, or other public video link to download MP4 video or MP3 audio in the best available quality.",
+      "Paste a YouTube, Instagram, Twitter, TikTok, or other public video link to download MP4 video or MP3 audio in the best available quality.",
     platformHeading: "Online video downloader for every major platform",
     platformIntro:
       "Stream Save is built for high-intent video download searches: YouTube downloader, Instagram downloader, Twitter video downloader, TikTok downloader, MP4 downloader, and MP3 audio downloader.",
